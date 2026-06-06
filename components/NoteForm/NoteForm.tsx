@@ -34,7 +34,16 @@ export default function NoteForm() {
   });
 
   function handleSubmit(formData: FormData) {
-    const values = Object.fromEntries(formData) as unknown as NewNote;
+    const values: NewNote = {
+      title: formData.get("title") as string,
+      content: formData.get("content") as string,
+      tag: formData.get("tag") as
+        | "Todo"
+        | "Work"
+        | "Personal"
+        | "Meeting"
+        | "Shopping",
+    };
     createMutation.mutate(values);
   }
 

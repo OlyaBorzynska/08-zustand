@@ -15,18 +15,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const tag = slug[0] === "all" ? "All" : slug[0];
   return {
-    title: `Notes: ${tag}`,
-    description: `Here are notes: ${tag}`,
+    title: `${tag} notes`,
+    description: `Here are ${tag} notes`,
     openGraph: {
-      title: `Notes: ${tag}`,
-      description: `Here are notes: ${tag}`,
-      url: `https://08-zustand-five-rust.vercel.app/`,
+      title: `${tag} notes`,
+      description: `Here are ${tag} notes`,
+      url: `https://08-zustand-five-rust.vercel.app/notes/filter/${tag}`,
       images: [
         {
           url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
           width: 1200,
           height: 630,
-          alt: `Notes: ${tag}`,
+          alt: `${tag} notes`,
         },
       ],
     },
