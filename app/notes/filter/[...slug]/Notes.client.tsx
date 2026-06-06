@@ -9,9 +9,8 @@ import { fetchNotes } from "@/lib/api";
 import Loader from "@/components/Loader/Loader";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import SearchBox from "@/components/SearchBox/SearchBox";
-import Modal from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
 import Pagination from "@/components/Pagination/Pagination";
+import Link from "next/link";
 
 interface NotesClientProps {
   searchTag: string | undefined;
@@ -20,7 +19,6 @@ interface NotesClientProps {
 export default function NotesClient({ searchTag }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const { data, isLoading, isError, isSuccess, isFetching } = useQuery({
     queryKey: ["notes", searchQuery, currentPage, searchTag],
@@ -28,13 +26,6 @@ export default function NotesClient({ searchTag }: NotesClientProps) {
     refetchOnMount: false,
     placeholderData: keepPreviousData,
   });
-
-  const openModal = () => {
-    setIsOpenModal(true);
-  };
-  const closeModal = () => {
-    setIsOpenModal(false);
-  };
 
   const handleChange = useDebouncedCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,15 +46,10 @@ export default function NotesClient({ searchTag }: NotesClientProps) {
             onPageChange={setCurrentPage}
           />
         )}
-        <button onClick={openModal} className={css.button}>
+        <Link href={"/notes/action/create"} className={css.button}>
           Create note +
-        </button>
+        </Link>
       </header>
-      {isOpenModal && (
-        <Modal onClose={closeModal}>
-          <NoteForm onClose={closeModal} />
-        </Modal>
-      )}
       {isSuccess && data.notes.length > 0 && <NoteList notes={data.notes} />}
       {(isLoading || isFetching) && <Loader />}
       {isError && <ErrorMessage />}

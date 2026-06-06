@@ -5,10 +5,33 @@ import {
   HydrationBoundary,
   dehydrate,
 } from "@tanstack/react-query";
+import { Metadata } from "next";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const note = await fetchNoteById(id);
+  return {
+    title: `Note: ${note.title}`,
+    description: `${note.content}`,
+    openGraph: {
+      title: `Note: ${note.title}`,
+      description: `${note.content}`,
+      url: `https://08-zustand-five-rust.vercel.app/`,
+      images: [
+        {
+          url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
+          width: 1200,
+          height: 630,
+          alt: `Note: ${note.title}`,
+        },
+      ],
+    },
+  };
+}
 
 export default async function NoteDetails({ params }: Props) {
   const { id } = await params;
